@@ -2505,3 +2505,12 @@ en:
     identifier: "Identifier"
     label: "Label"
     description: "Description"
+  export:
+    title: "Export"
+    tooltip: "Export map data"
+    image_options: "Image Options"
+    original_image: "Original Image"
+    image_tiles: "Image Tiles"
+    format_options: "Format Options"
+    include_metadata: "Include Metadata"
+    export_button: "Export"
