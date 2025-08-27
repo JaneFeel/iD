@@ -3,7 +3,7 @@ import {
 } from 'd3-selection';
 
 import _debounce from 'lodash-es/debounce';
-import { uiToolDrawModes, uiToolNotes, uiToolSave, uiToolSidebarToggle, uiToolUndoRedo } from './tools';
+import { uiToolDrawModes, uiToolExport, uiToolNotes, uiToolSave, uiToolSidebarToggle, uiToolUndoRedo } from './tools';
 
 
 export function uiTopToolbar(context) {
@@ -12,7 +12,8 @@ export function uiTopToolbar(context) {
         modes = uiToolDrawModes(context),
         notes = uiToolNotes(context),
         undoRedo = uiToolUndoRedo(context),
-        save = uiToolSave(context);
+        save = uiToolSave(context),
+        exportTool = uiToolExport(context);
 
     function notesEnabled() {
         var noteLayer = context.layers().layer('notes');
@@ -23,8 +24,6 @@ export function uiTopToolbar(context) {
 
         bar.on('wheel.topToolbar', function(d3_event) {
             if (!d3_event.deltaX) {
-                // translate vertical scrolling into horizontal scrolling in case
-                // the user doesn't have an input device that can scroll horizontally
                 bar.node().scrollLeft += d3_event.deltaY;
             }
         });
@@ -49,7 +48,7 @@ export function uiTopToolbar(context) {
                 tools = tools.concat([notes, 'spacer']);
             }
 
-            tools = tools.concat([undoRedo, save]);
+            tools = tools.concat([exportTool, undoRedo, save]);
 
             var toolbarItems = bar.selectAll('.toolbar-item')
                 .data(tools, function(d) {
