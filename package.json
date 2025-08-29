@@ -3,7 +3,7 @@
   "version": "2.35.0-dev",
   "description": "A friendly editor for OpenStreetMap",
   "main": "dist/iD.min.js",
-  "repository": "github:openstreetmap/iD",
+  "repository": "github:JaneFeel/iD",
   "homepage": "https://github.com/openstreetmap/iD",
   "bugs": "https://github.com/openstreetmap/iD/issues",
   "keywords": [
@@ -134,5 +134,8 @@
   },
   "browserslist": [
     "> 0.3%, last 6 major versions, not dead, Firefox ESR, maintained node versions"
-  ]
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
 }
