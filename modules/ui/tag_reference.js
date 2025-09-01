@@ -92,18 +92,6 @@ export function uiTagReference(what) {
               .append('span')
               .call(t.append(docs.wiki.text));
         }
-
-        // Add link to info about "good changeset comments" - #2923
-        if (what.key === 'comment') {
-            _body
-                .append('a')
-                .attr('class', 'tag-reference-comment-link')
-                .attr('target', '_blank')
-                .call(svgIcon('#iD-icon-out-link', 'inline'))
-                .attr('href', t('commit.about_changeset_comments_link'))
-                .append('span')
-                .call(t.append('commit.about_changeset_comments'));
-        }
     }
 
 

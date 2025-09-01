@@ -18,8 +18,7 @@ export function uiPaneHelp(context) {
             'before_start',
             'open_source_h',
             'open_source',
-            'open_source_attribution',
-            'open_source_help'
+            'open_source_attribution'
         ]],
         ['overview', [
             'navigation_h',
