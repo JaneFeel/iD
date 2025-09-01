@@ -134,8 +134,5 @@
   },
   "browserslist": [
     "> 0.3%, last 6 major versions, not dead, Firefox ESR, maintained node versions"
-  ],
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  }
+  ]
 }
