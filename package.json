@@ -4,8 +4,8 @@
   "description": "A friendly editor for OpenStreetMap",
   "main": "dist/iD.min.js",
   "repository": "github:JaneFeel/iD",
-  "homepage": "https://github.com/openstreetmap/iD",
-  "bugs": "https://github.com/openstreetmap/iD/issues",
+  "homepage": "https://github.com/JaneFeel/iD",
+  "bugs": "https://github.com/JaneFeel/iD/issues",
   "keywords": [
     "editor",
     "openstreetmap"
@@ -137,5 +137,5 @@
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
-  },
+  }
 }
