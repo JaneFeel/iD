@@ -112,6 +112,8 @@ export function uiSuccess(context) {
       .append('span')
       .call(t.append('success.help_link_text'));
 
+    return;
+
     let osm = context.connection();
     if (!osm) return;
 
