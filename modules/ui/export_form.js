@@ -1,4 +1,5 @@
 import { dispatch as d3_dispatch } from 'd3-dispatch';
+import { presetField } from '../presets/field';
 import { t } from '../core/localizer';
 import { svgIcon } from '../svg';
 import { uiField } from './field';
@@ -12,49 +13,42 @@ export function uiExportForm(context) {
     var _tags = {};
     
     function createFields() {
-        var imageTypeField = {
-            id: 'image_type',
-            key: 'image_type',
-            type: 'radio',
-            label: function() { return t.append('export.image_options'); },
-            placeholder: function() { return ''; },
-            options: ['original', 'tiles'],
-            t: function(scope, options) {
-                if (scope === 'options.original') return t('export.original_image', options);
-                if (scope === 'options.tiles') return t('export.image_tiles', options);
-                return t('export.' + scope, options);
-            }
-        };
-        
-        var formatTypeField = {
-            id: 'format_type',
-            key: 'format_type',
-            type: 'radio',
-            label: function() { return t.append('export.format_options'); },
-            placeholder: function() { return ''; },
-            options: ['coco', 'yolo'],
-            t: function(scope, options) {
-                if (scope === 'options.coco') return 'COCO';
-                if (scope === 'options.yolo') return 'YOLO';
-                return t('export.' + scope, options);
-            }
-        };
-        
-        var metadataField = {
-            id: 'include_metadata',
-            key: 'include_metadata',
-            type: 'check',
-            label: function() { return t.append('export.include_metadata'); },
-            placeholder: function() { return ''; },
-            t: function(scope, options) {
-                return t('export.' + scope, options);
+        var fields = {
+            'export_image_type': {
+                key: 'image_type',
+                type: 'radio',
+                label: 'Image Options',
+                options: ['original', 'tiles'],
+                strings: {
+                    options: {
+                        original: 'Original Image',
+                        tiles: 'Image Tiles'
+                    }
+                }
+            },
+            'export_format_type': {
+                key: 'format_type',
+                type: 'radio',
+                label: 'Format Options',
+                options: ['coco', 'yolo'],
+                strings: {
+                    options: {
+                        coco: 'COCO',
+                        yolo: 'YOLO'
+                    }
+                }
+            },
+            'export_include_metadata': {
+                key: 'include_metadata',
+                type: 'check',
+                label: 'Include Metadata'
             }
         };
         
         return [
-            uiField(context, imageTypeField, null, { show: true, revert: false }),
-            uiField(context, formatTypeField, null, { show: true, revert: false }),
-            uiField(context, metadataField, null, { show: true, revert: false })
+            uiField(context, presetField('export_image_type', fields.export_image_type), null, { show: true, revert: false }),
+            uiField(context, presetField('export_format_type', fields.export_format_type), null, { show: true, revert: false }),
+            uiField(context, presetField('export_include_metadata', fields.export_include_metadata), null, { show: true, revert: false })
         ];
     }
 
@@ -121,8 +115,7 @@ export function uiExportForm(context) {
                     includeMetadata: _tags.include_metadata !== undefined ? _tags.include_metadata : true
                 };
                 
-                console.log('Export options:', exportOptions);
-                
+                console.log('Export options:', exportOptions);                
                 dispatch.call('cancel');
             });
             
