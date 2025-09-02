@@ -148,12 +148,15 @@ export function uiToolExport(context) {
     tool.render = function(selection) {
         tooltipBehavior = uiTooltip()
             .placement('bottom')
-            .title(t.append('export.tooltip'))
+            .title(() => t.append('export.tooltip'))
             .scrollContainer(context.container().select('.top-toolbar'));
 
         button = selection
             .append('button')
             .attr('class', 'export bar-button')
+            .on('pointerup', function(d3_event) {
+                lastPointerUpType = d3_event.pointerType;
+            })
             .on('click', function() {
                 showExportForm();
             })
