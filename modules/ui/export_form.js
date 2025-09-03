@@ -38,17 +38,17 @@ export function uiExportForm(context) {
                     }
                 }
             },
-            'export_include_metadata': {
-                key: 'include_metadata',
-                type: 'check',
-                label: 'Include Metadata'
-            }
+            // 'export_include_metadata': {
+            //     key: 'include_metadata',
+            //     type: 'check',
+            //     label: 'Include Metadata'
+            // }
         };
         
         return [
-            uiField(context, presetField('export_image_type', fields.export_image_type), null, { show: true, revert: false }),
-            uiField(context, presetField('export_format_type', fields.export_format_type), null, { show: true, revert: false }),
-            uiField(context, presetField('export_include_metadata', fields.export_include_metadata), null, { show: true, revert: false })
+            uiField(context, presetField(t('export.image_options'), fields.export_image_type), null, { show: true, revert: false }),
+            uiField(context, presetField(t('export.format_options'), fields.export_format_type), null, { show: true, revert: false }),
+            // uiField(context, presetField('export_include_metadata', fields.export_include_metadata), null, { show: true, revert: false })
         ];
     }
 
@@ -95,18 +95,22 @@ export function uiExportForm(context) {
         
         var formContent = selection
             .append('div')
-            .attr('class', 'export-form section-content');
+            .attr('class', 'modal-section');
         
         formContent
             .call(formFields.fieldsArr(_fieldsArr));
         
         var actionSection = selection
             .append('div')
-            .attr('class', 'export-form section-buttons');
+            .attr('class', 'modal-section save-section fillL');
+
+        var buttonsSection = actionSection
+            .append('div')
+            .attr('class', 'buttons fillL')
             
-        actionSection
+        buttonsSection
             .append('button')
-            .attr('class', 'export-button action')
+            .attr('class', 'action button')
             .text(t('export.export_button'))
             .on('click', function() {
                 var exportOptions = {
