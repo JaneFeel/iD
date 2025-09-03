@@ -1,11 +1,11 @@
 {
-  "name": "iD",
-  "version": "2.35.0-dev",
+  "name": "@janefeel/id",
+  "version": "2.35.10",
   "description": "A friendly editor for OpenStreetMap",
   "main": "dist/iD.min.js",
-  "repository": "github:openstreetmap/iD",
-  "homepage": "https://github.com/openstreetmap/iD",
-  "bugs": "https://github.com/openstreetmap/iD/issues",
+  "repository": "github:JaneFeel/iD",
+  "homepage": "https://github.com/JaneFeel/iD",
+  "bugs": "https://github.com/JaneFeel/iD/issues",
   "keywords": [
     "editor",
     "openstreetmap"

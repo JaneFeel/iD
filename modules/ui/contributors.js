@@ -41,25 +41,25 @@ export function uiContributors(context) {
             .attr('target', '_blank')
             .text(String);
 
-        if (u.length > limit) {
-            var count = d3_select(document.createElement('span'));
+        // if (u.length > limit) {
+        //     var count = d3_select(document.createElement('span'));
 
-            var othersNum = u.length - limit + 1;
+        //     var othersNum = u.length - limit + 1;
 
-            count.append('a')
-                .attr('target', '_blank')
-                .attr('href', function() {
-                    return osm.changesetsURL(context.map().center(), context.map().zoom());
-                })
-                .text(othersNum);
+        //     count.append('a')
+        //         .attr('target', '_blank')
+        //         .attr('href', function() {
+        //             return osm.changesetsURL(context.map().center(), context.map().zoom());
+        //         })
+        //         .text(othersNum);
 
-            wrap.append('span')
-                .html(t.html('contributors.truncated_list', { n: othersNum, users: { html: userList.html() }, count: { html: count.html() } }));
+        //     wrap.append('span')
+        //         .html(t.html('contributors.truncated_list', { n: othersNum, users: { html: userList.html() }, count: { html: count.html() } }));
 
-        } else {
-            wrap.append('span')
-                .html(t.html('contributors.list', { users: { html: userList.html() } }));
-        }
+        // } else {
+        //     wrap.append('span')
+        //         .html(t.html('contributors.list', { users: { html: userList.html() } }));
+        // }
 
         if (!u.length) {
             hidden = true;
