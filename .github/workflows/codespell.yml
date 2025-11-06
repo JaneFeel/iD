@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
-      - uses: codespell-project/actions-codespell@v2.1
+      - uses: codespell-project/actions-codespell@v2.2
         with:
           check_filenames: true
           skip: ./.git,./data/territory_languages.json,./data/imagery.json,./data/languages.json,./data/address_formats.json,./dist/locales,./docs/img,./dist/img,./css,package.json,package-lock.json,scripts,docs
