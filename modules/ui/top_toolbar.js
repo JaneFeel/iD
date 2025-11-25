@@ -13,7 +13,7 @@ export function uiTopToolbar(context) {
         notes = uiToolNotes(context),
         undoRedo = uiToolUndoRedo(context),
         save = uiToolSave(context),
-        exportTool = uiToolExport(context);
+        // exportTool = uiToolExport(context);
 
     function notesEnabled() {
         var noteLayer = context.layers().layer('notes');
@@ -48,7 +48,8 @@ export function uiTopToolbar(context) {
                 tools = tools.concat([notes, 'spacer']);
             }
 
-            tools = tools.concat([exportTool, undoRedo, save]);
+            // tools = tools.concat([exportTool, undoRedo, save]);
+            tools = tools.concat([undoRedo, save]);
 
             var toolbarItems = bar.selectAll('.toolbar-item')
                 .data(tools, function(d) {
