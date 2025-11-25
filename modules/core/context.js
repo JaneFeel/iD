@@ -57,6 +57,17 @@ export function coreContext() {
     return context;
   };
 
+  /* Project Tag */
+  let _projectTag;
+  context.projectTag = function(val) {
+    if (!arguments.length) return _projectTag;
+    _projectTag = val;
+    if (_connection) {
+      _connection.projectTag(val);
+    }
+    return context;
+  };
+
   /* Document title */
   /* (typically shown as the label for the browser window/tab) */
 

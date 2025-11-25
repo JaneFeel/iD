@@ -47,6 +47,7 @@ var _rateLimitError;
 var _userChangesets;
 var _userDetails;
 var _off;
+var _projectTag;
 
 // set a default but also load this from the API status
 var _maxWayNodes = 2000;
@@ -1104,11 +1105,16 @@ export default {
             dispatch.call('loading');   // start the spinner
         }
 
-        var path = '/api/0.6/map.json?bbox=';
+        var path = _projectTag ? '/api/0.6/project_map.json?bbox=' : '/api/0.6/map.json?bbox=';
         var options = { skipSeen: true };
+        
+        var url = path + tile.extent.toParam();
+        if (_projectTag) {
+            url += '&project_tag=' + encodeURIComponent(_projectTag);
+        }
 
         _tileCache.inflight[tile.id] = this.loadFromAPI(
-            path + tile.extent.toParam(),
+            url,
             tileCallback.bind(this),
             options
         );
@@ -1471,6 +1477,13 @@ export default {
     tileZoom: function(val) {
         if (!arguments.length) return _tileZoom;
         _tileZoom = val;
+        return this;
+    },
+
+
+    projectTag: function(val) {
+        if (!arguments.length) return _projectTag;
+        _projectTag = val;
         return this;
     },
 
