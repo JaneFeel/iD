@@ -759,7 +759,10 @@ export function uiFieldCombo(field, context) {
                 .attr('href', '#')
                 .on('click', removeMultikey)
                 .attr('class', 'remove')
-                .text('×');
+                .text('×')
+                .style('visibility', function(d) {
+                    return d.isMixed ? 'hidden' : null;
+                });
 
             updateIcon('');
         } else {
