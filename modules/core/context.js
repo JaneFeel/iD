@@ -61,10 +61,7 @@ export function coreContext() {
   let _projectTag;
   context.projectTag = function(val) {
     if (!arguments.length) return _projectTag;
-    _projectTag = val;
-    if (_connection) {
-      _connection.projectTag(val);
-    }
+    _setsDocumentTitle = val;
     return context;
   };
 
