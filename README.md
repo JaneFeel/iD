@@ -53,3 +53,11 @@ iD also bundles portions of the following open source software.
 ## Thank you
 
 Initial development of iD was made possible by a [grant of the Knight Foundation](https://blog.mapbox.com/large-investment-in-openstreetmap-from-knight-foundation-cf7aa00534db).
+
+
+```
+npm version patch
+npm run build
+npm run dist:min
+npm publish --access public
+```
