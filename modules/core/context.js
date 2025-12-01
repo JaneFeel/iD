@@ -61,7 +61,7 @@ export function coreContext() {
   let _projectTag;
   context.projectTag = function(val) {
     if (!arguments.length) return _projectTag;
-    _setsDocumentTitle = val;
+    _projectTag = val;
     return context;
   };
 
