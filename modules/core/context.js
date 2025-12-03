@@ -62,6 +62,9 @@ export function coreContext() {
   context.projectTag = function(val) {
     if (!arguments.length) return _projectTag;
     _projectTag = val;
+    if (_connection) {
+      _connection.projectTag(val);
+    }
     return context;
   };
 
