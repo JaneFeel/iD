@@ -1327,6 +1327,42 @@ export default {
     },
 
 
+    // Delete a note comment
+    // DELETE /api/0.6/notes/#id/comment/#cid
+    deleteNoteComment: function(note, commentId, callback) {
+        if (!this.authenticated()) {
+            return callback({ message: 'Not Authenticated', status: -3 }, note);
+        }
+        if (_noteCache.inflightPost[note.id]) {
+            return callback({ message: 'Note update already inflight', status: -2 }, note);
+        }
+
+        var path = '/api/0.6/notes/' + note.id + '/comment/' + commentId;
+
+        _noteCache.inflightPost[note.id] = oauth.xhr({
+            method: 'DELETE',
+            path: path
+        }, wrapcb(this, done, _connectionID));
+
+
+        function done(err, xml) {
+            delete _noteCache.inflightPost[note.id];
+            if (err) { return callback(err); }
+
+            this.removeNote(note);
+
+            var options = { skipSeen: false };
+            return parseXML(xml, function(err, results) {
+                if (err) {
+                    return callback(err);
+                } else {
+                    return callback(undefined, results[0]);
+                }
+            }, options);
+        }
+    },
+
+
     /* connection options for source switcher (optional) */
     apiConnections: function(val) {
         if (!arguments.length) return _apiConnections;

@@ -75,6 +75,30 @@ export function uiNoteComments() {
                 .attr('rel', 'noopener nofollow')
                 .attr('target', '_blank');
 
+        mainEnter
+            .append('div')
+            .attr('class', 'comment-actions')
+            .each(function(d) {
+                var osm = services.osm;
+                if (!osm || !osm.authenticated()) return;
+                
+                osm.userDetails(function(err, user) {
+                    if (err || !user) return;
+                    
+                    if (d.uid && user.id && d.uid === user.id) {
+                        d3_select(this)
+                            .append('button')
+                            .attr('class', 'comment-delete-button')
+                            .attr('title', t('note.delete_comment'))
+                            .call(svgIcon('#iD-icon-delete'))
+                            .on('click', function(d3_event) {
+                                d3_event.preventDefault();
+                                deleteComment(d);
+                            });
+                    }
+                });
+            });
+
         comments
             .call(replaceAvatars);
     }
@@ -101,6 +125,29 @@ export function uiNoteComments() {
                     .attr('src', user.image_url)
                     .attr('alt', user.display_name);
             });
+        });
+    }
+
+
+    function deleteComment(comment) {
+        var osm = services.osm;
+        if (!osm) return;
+
+        var commentText = comment.text || '';
+        var confirmMessage = t('note.confirm_delete_comment', { comment: commentText.substring(0, 50) });
+        if (!window.confirm(confirmMessage)) return;
+
+        osm.deleteNoteComment(_note, comment.id, function(err, updatedNote) {
+            if (err) {
+                console.error('Error deleting comment:', err);
+                alert(t('note.error_deleting_comment'));
+                return;
+            }
+
+            if (updatedNote) {
+                osm.replaceNote(updatedNote);
+                d3_select(document).dispatch('change');
+            }
         });
     }
 
