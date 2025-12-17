@@ -679,6 +679,178 @@ describe('iD.serviceOsm', function () {
     });
 
 
+    describe('#deleteNoteComment', function() {
+        var noteXML = '<?xml version="1.0" encoding="UTF-8"?>' +
+            '<osm>' +
+            '<note lon="10" lat="0">' +
+            '  <id>1</id>' +
+            '  <url>https://www.openstreetmap.org/api/0.6/notes/1</url>' +
+            '  <comment_url>https://www.openstreetmap.org/api/0.6/notes/1/comment</comment_url>' +
+            '  <close_url>https://www.openstreetmap.org/api/0.6/notes/1/close</close_url>' +
+            '  <date_created>2019-01-01 00:00:00 UTC</date_created>' +
+            '  <status>open</status>' +
+            '  <comments>' +
+            '    <comment>' +
+            '      <date>2019-01-01 00:00:00 UTC</date>' +
+            '      <uid>123</uid>' +
+            '      <user>user123</user>' +
+            '      <user_url>https://www.openstreetmap.org/user/user123</user_url>' +
+            '      <action>opened</action>' +
+            '      <text>This is a note</text>' +
+            '      <html>&lt;p&gt;This is a note&lt;/p&gt;</html>' +
+            '    </comment>' +
+            '  </comments>' +
+            '</note>' +
+            '</osm>';
+
+        beforeEach(function() {
+            login();
+        });
+
+        afterEach(function() {
+            logout();
+        });
+
+        it('requires authentication', function(done) {
+            logout();
+            var note = iD.osmNote({ id: 1, loc: [10, 0] });
+            connection.deleteNoteComment(note, 456, function(err) {
+                expect(err).to.deep.equal({ message: 'Not Authenticated', status: -3 });
+                done();
+            });
+        });
+
+        it('returns error if note update is already inflight', function(done) {
+            var note = iD.osmNote({ id: 1, loc: [10, 0] });
+            
+            // Mock first request to keep it inflight
+            serverXHR.respondWith('DELETE', 'https://www.openstreetmap.org/api/0.6/notes/1/comment/456',
+                function(request) {
+                    // Don't respond immediately to keep it inflight
+                }
+            );
+
+            connection.deleteNoteComment(note, 456, function() {});
+            
+            // Try to delete again while first request is inflight
+            connection.deleteNoteComment(note, 456, function(err) {
+                expect(err).to.deep.equal({ message: 'Note update already inflight', status: -2 });
+                done();
+            });
+        });
+
+        it('deletes a comment', function(done) {
+            var note = iD.osmNote({
+                id: 1,
+                loc: [10, 0],
+                comments: [
+                    { id: 456, text: 'Original comment', user: 'user123', uid: 123 }
+                ]
+            });
+            connection.replaceNote(note);
+
+            serverXHR.respondWith('DELETE', 'https://www.openstreetmap.org/api/0.6/notes/1/comment/456',
+                [200, { 'Content-Type': 'text/xml' }, noteXML]
+            );
+
+            connection.deleteNoteComment(note, 456, function(err, result) {
+                expect(err).to.not.be.ok;
+                expect(result).to.be.an.instanceOf(iD.osmNote);
+                expect(result.id).to.eql('1');
+                expect(result.loc).to.eql([10, 0]);
+                done();
+            });
+
+            serverXHR.respond();
+        });
+
+        it('updates the note cache after deletion', function(done) {
+            var note = iD.osmNote({
+                id: 1,
+                loc: [10, 0],
+                comments: [
+                    { id: 456, text: 'Comment to delete', user: 'user123', uid: 123 }
+                ]
+            });
+            connection.replaceNote(note);
+
+            serverXHR.respondWith('DELETE', 'https://www.openstreetmap.org/api/0.6/notes/1/comment/456',
+                [200, { 'Content-Type': 'text/xml' }, noteXML]
+            );
+
+            connection.deleteNoteComment(note, 456, function(err, result) {
+                expect(err).to.not.be.ok;
+                
+                // Check that the note was removed from cache
+                var cachedNote = connection.getNote(1);
+                expect(cachedNote).to.be.ok;
+                expect(cachedNote.id).to.eql('1');
+                
+                done();
+            });
+
+            serverXHR.respond();
+        });
+
+        it('handles server errors', function(done) {
+            var note = iD.osmNote({ id: 1, loc: [10, 0] });
+
+            serverXHR.respondWith('DELETE', 'https://www.openstreetmap.org/api/0.6/notes/1/comment/456',
+                [403, {}, 'Forbidden']
+            );
+
+            connection.deleteNoteComment(note, 456, function(err) {
+                expect(err).to.be.ok;
+                expect(err.status).to.eql(403);
+                done();
+            });
+
+            serverXHR.respond();
+        });
+
+        it('handles network errors', function(done) {
+            var note = iD.osmNote({ id: 1, loc: [10, 0] });
+
+            serverXHR.respondWith('DELETE', 'https://www.openstreetmap.org/api/0.6/notes/1/comment/456',
+                function(request) {
+                    request.error();
+                }
+            );
+
+            connection.deleteNoteComment(note, 456, function(err) {
+                expect(err).to.be.ok;
+                done();
+            });
+
+            serverXHR.respond();
+        });
+
+        it('constructs correct API path', function(done) {
+            var note = iD.osmNote({ id: 42, loc: [10, 0] });
+            var commentId = 789;
+
+            serverXHR.respondWith('DELETE', 'https://www.openstreetmap.org/api/0.6/notes/42/comment/789',
+                [200, { 'Content-Type': 'text/xml' }, noteXML]
+            );
+
+            connection.deleteNoteComment(note, commentId, function(err) {
+                expect(err).to.not.be.ok;
+                
+                // Verify the request was made to the correct URL
+                var requests = serverXHR.requests.filter(function(req) {
+                    return req.method === 'DELETE' &&
+                           req.url === 'https://www.openstreetmap.org/api/0.6/notes/42/comment/789';
+                });
+                expect(requests.length).to.eql(1);
+                
+                done();
+            });
+
+            serverXHR.respond();
+        });
+    });
+
+
     describe('API capabilities', function() {
         var capabilitiesXML = `<?xml version="1.0" encoding="UTF-8"?>
         <osm version="0.6" generator="OpenStreetMap server" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
