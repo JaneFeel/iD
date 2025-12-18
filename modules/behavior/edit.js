@@ -2,7 +2,7 @@ export function behaviorEdit(context) {
 
     function behavior() {
         context.map()
-            .minzoom(context.minEditableZoom());
+            .minzoom(context.editableZoom());
     }
 
 

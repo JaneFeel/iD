@@ -15,7 +15,7 @@ export function uiNotice(context) {
             .append('button')
             .attr('class', 'zoom-to notice fillD')
             .on('click', function() {
-                context.map().zoomEase(context.minEditableZoom());
+                context.map().zoomEase(context.editableZoom());
             })
             .on('wheel', function(d3_event) {   // let wheel events pass through #4482
                 var e2 = new WheelEvent(d3_event.type, d3_event);
@@ -30,7 +30,7 @@ export function uiNotice(context) {
 
 
         function disableTooHigh() {
-            var canEdit = context.map().zoom() >= context.minEditableZoom();
+            var canEdit = context.map().zoom() >= context.editableZoom();
             div.style('display', canEdit ? 'none' : 'block');
         }
 

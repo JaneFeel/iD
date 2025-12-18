@@ -583,7 +583,7 @@ export function rendererMap(context) {
         if (geoScaleToZoom(k, TILESIZE) < _minzoom) {
             surface.interrupt();
             dispatch.call('hitMinZoom', this, map);
-            setCenterZoom(map.center(), context.minEditableZoom(), 0, true);
+            setCenterZoom(map.center(), context.editableZoom(), 0, true);
             scheduleRedraw();
             dispatch.call('move', this, map);
             return;
@@ -879,7 +879,7 @@ export function rendererMap(context) {
         if (z2 < _minzoom) {
             surface.interrupt();
             dispatch.call('hitMinZoom', this, map);
-            z2 = context.minEditableZoom();
+            z2 = context.editableZoom();
         }
 
         if (setCenterZoom(map.center(), z2)) {
@@ -1040,7 +1040,7 @@ export function rendererMap(context) {
 
 
     map.withinEditableZoom = function() {
-        return map.zoom() >= context.minEditableZoom();
+        return map.zoom() >= context.editableZoom();
     };
 
 
