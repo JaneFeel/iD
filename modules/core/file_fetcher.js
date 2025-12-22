@@ -29,17 +29,20 @@ export function coreFileFetcher() {
     'qa_data': 'data/qa_data.min.json',
     'shortcuts': 'data/shortcuts.min.json',
     'territory_languages': 'data/territory_languages.min.json',
-    'oci_defaults': ociCdnUrl.replace('{version}', ociVersionMinor) + 'dist/defaults.min.json',
-    'oci_features': ociCdnUrl.replace('{version}', ociVersionMinor) + 'dist/featureCollection.min.json',
-    'oci_resources': ociCdnUrl.replace('{version}', ociVersionMinor) + 'dist/resources.min.json',
-    'presets_package': presetsCdnUrl.replace('{presets_version}', presetsVersion) + 'package.json',
-    'deprecated': presetsCdnUrl + 'dist/deprecated.min.json',
-    'discarded': presetsCdnUrl + 'dist/discarded.min.json',
-    'preset_categories': presetsCdnUrl + 'dist/preset_categories.min.json',
-    'preset_defaults': presetsCdnUrl + 'dist/preset_defaults.min.json',
-    'preset_fields': presetsCdnUrl + 'dist/fields.min.json',
-    'preset_presets': presetsCdnUrl + 'dist/presets.min.json',
-    'wmf_sitematrix': wmfSitematrixCdnUrl.replace('{version}', '0.2') + 'data/wikipedia.min.json'
+    // OCI data - now served locally from dist/data/oci/
+    'oci_defaults': ociCdnUrl + 'defaults.min.json',
+    'oci_features': ociCdnUrl + 'featureCollection.min.json',
+    'oci_resources': ociCdnUrl + 'resources.min.json',
+    // Presets data - now served locally from dist/data/presets/
+    'presets_package': presetsCdnUrl + 'package.json',
+    'deprecated': presetsCdnUrl + 'deprecated.min.json',
+    'discarded': presetsCdnUrl + 'discarded.min.json',
+    'preset_categories': presetsCdnUrl + 'preset_categories.min.json',
+    'preset_defaults': presetsCdnUrl + 'preset_defaults.min.json',
+    'preset_fields': presetsCdnUrl + 'fields.min.json',
+    'preset_presets': presetsCdnUrl + 'presets.min.json',
+    // WMF sitematrix data - now served locally from dist/data/wmf/
+    'wmf_sitematrix': wmfSitematrixCdnUrl + 'wikipedia.min.json'
   };
 
   let _cachedData = {};
@@ -60,15 +63,7 @@ export function coreFileFetcher() {
       return Promise.reject(`Unknown data file for "${which}"`);
     }
 
-    if (url.includes('{presets_version}')) {
-      return _this.get('presets_package')
-        .then(result => {
-          const presetsVersion = result.version;
-          return getUrl(url.replace('{presets_version}', presetsVersion), which);
-        });
-    } else {
-      return getUrl(url, which);
-    }
+    return getUrl(url, which);
   };
 
   function getUrl(url, which) {

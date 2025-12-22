@@ -1,14 +1,15 @@
 /* eslint-disable no-undef */
 
-// cdns for external data packages
+// Local paths for external data packages (downloaded during build)
+// These can still be overridden by environment variables for custom CDN deployments
 const presetsCdnUrl = ENV__ID_PRESETS_CDN_URL
-  || 'https://cdn.jsdelivr.net/npm/@openstreetmap/id-tagging-schema@{presets_version}/';
+  || 'data/presets/';
 const ociCdnUrl = ENV__ID_OCI_CDN_URL
-  || 'https://cdn.jsdelivr.net/npm/osm-community-index@{version}/';
+  || 'data/oci/';
 const wmfSitematrixCdnUrl = ENV__ID_WMF_SITEMATRIX_CDN_URL
-  || 'https://cdn.jsdelivr.net/npm/wmf-sitematrix@{version}/';
+  || 'data/wmf/';
 const nsiCdnUrl = ENV__ID_NSI_CDN_URL
-  || 'https://cdn.jsdelivr.net/npm/name-suggestion-index@{version}/';
+  || 'data/nsi/';
 
 // api urls and settings
 const defaultOsmApiConnections = {

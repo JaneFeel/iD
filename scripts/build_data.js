@@ -17,9 +17,18 @@ fontawesome.library.add(fas, far, fab);
 
 const dotenv = require('dotenv');
 dotenv.config({ quiet: true });
-const presetsVersion = require('../package.json').devDependencies['@openstreetmap/id-tagging-schema'];
+const packageJSON = require('../package.json');
+const presetsVersion = packageJSON.devDependencies['@openstreetmap/id-tagging-schema'];
+const ociVersion = packageJSON.dependencies['osm-community-index'] || packageJSON.devDependencies['osm-community-index'];
+const nsiVersion = packageJSON.devDependencies['name-suggestion-index'];
+const parseVersion = require('vparse');
+const ociVersionMinor = `${parseVersion(ociVersion).major}.${parseVersion(ociVersion).minor}`;
+
 /* eslint-disable no-process-env */
-const presetsUrl = (process.env.ID_PRESETS_CDN_URL || 'https://cdn.jsdelivr.net/npm/@openstreetmap/id-tagging-schema@{presets_version}').replace('{presets_version}', presetsVersion);
+const presetsUrl = (process.env.ID_PRESETS_CDN_URL || 'https://cdn.jsdelivr.net/npm/@openstreetmap/id-tagging-schema@{presets_version}/').replace('{presets_version}', presetsVersion);
+const ociUrl = (process.env.ID_OCI_CDN_URL || 'https://cdn.jsdelivr.net/npm/osm-community-index@{version}/').replace('{version}', ociVersionMinor);
+const wmfSitematrixUrl = (process.env.ID_WMF_SITEMATRIX_CDN_URL || 'https://cdn.jsdelivr.net/npm/wmf-sitematrix@{version}/').replace('{version}', '0.2');
+const nsiUrl = (process.env.ID_NSI_CDN_URL || 'https://cdn.jsdelivr.net/npm/name-suggestion-index@{version}/').replace('{version}', nsiVersion);
 /* eslint-enable no-process-env */
 
 let _currBuild = null;
@@ -63,6 +72,15 @@ function buildData() {
     'svg/fontawesome/*.svg',
   ]);
 
+  // Create directories for external packages
+  shell.mkdir('-p', [
+    'dist/data/presets',
+    'dist/data/presets/dist/translations',
+    'dist/data/oci',
+    'dist/data/wmf',
+    'dist/data/nsi'
+  ]);
+
   // compile Font Awesome icons
   let faIcons = new Set([
     // list here the icons we want to use in the UI that aren't tied to other data
@@ -97,11 +115,39 @@ function buildData() {
     minifyJSON('data/qa_data.json', 'dist/data/qa_data.min.json'),
     minifyJSON('data/shortcuts.json', 'dist/data/shortcuts.min.json'),
     minifyJSON('data/territory_languages.json', 'dist/data/territory_languages.min.json'),
+    
+    // Download and save presets data locally
+    downloadExternalData(`${presetsUrl}package.json`, 'dist/data/presets/package.json'),
+    downloadExternalData(`${presetsUrl}dist/deprecated.min.json`, 'dist/data/presets/deprecated.min.json'),
+    downloadExternalData(`${presetsUrl}dist/discarded.min.json`, 'dist/data/presets/discarded.min.json'),
+    downloadExternalData(`${presetsUrl}dist/preset_categories.min.json`, 'dist/data/presets/preset_categories.min.json'),
+    downloadExternalData(`${presetsUrl}dist/preset_defaults.min.json`, 'dist/data/presets/preset_defaults.min.json'),
+    downloadExternalData(`${presetsUrl}dist/fields.min.json`, 'dist/data/presets/fields.min.json'),
+    downloadExternalData(`${presetsUrl}dist/presets.min.json`, 'dist/data/presets/presets.min.json'),
+    
+    // Download and save presets translations locally
+    downloadExternalData(`${presetsUrl}dist/translations/index.min.json`, 'dist/data/presets/dist/translations/index.min.json'),
+    downloadExternalData(`${presetsUrl}dist/translations/en.min.json`, 'dist/data/presets/dist/translations/en.min.json'),
+    downloadExternalData(`${presetsUrl}dist/translations/zh.min.json`, 'dist/data/presets/dist/translations/zh.min.json'),
+    downloadExternalData(`${presetsUrl}dist/translations/zh-CN.min.json`, 'dist/data/presets/dist/translations/zh-CN.min.json'),
+    downloadExternalData(`${presetsUrl}dist/translations/zh-TW.min.json`, 'dist/data/presets/dist/translations/zh-TW.min.json'),
+    
+    // Download and save OCI data locally
+    downloadExternalData(`${ociUrl}dist/defaults.min.json`, 'dist/data/oci/defaults.min.json'),
+    downloadExternalData(`${ociUrl}dist/featureCollection.min.json`, 'dist/data/oci/featureCollection.min.json'),
+    downloadExternalData(`${ociUrl}dist/resources.min.json`, 'dist/data/oci/resources.min.json'),
+    
+    // Download and save WMF sitematrix data locally
+    downloadExternalData(`${wmfSitematrixUrl}data/wikipedia.min.json`, 'dist/data/wmf/wikipedia.min.json'),
+    
+    // Download and save NSI data locally
+    downloadExternalData(`${nsiUrl}dist/nsi.min.json`, 'dist/data/nsi/nsi.min.json'),
+    
     Promise.all([
       // Fetch the icons that are needed by the expected tagging schema version
-      fetchOrRequire(`${presetsUrl}/dist/presets.min.json`),
-      fetchOrRequire(`${presetsUrl}/dist/preset_categories.min.json`),
-      fetchOrRequire(`${presetsUrl}/dist/fields.min.json`)
+      fetchOrRequire(`${presetsUrl}dist/presets.min.json`),
+      fetchOrRequire(`${presetsUrl}dist/preset_categories.min.json`),
+      fetchOrRequire(`${presetsUrl}dist/fields.min.json`)
     ])
     .then(responses => Promise.all(responses.map(response => response.json())))
     .then((results) => {
@@ -285,6 +331,30 @@ function fetchOrRequire(url) {
   } else {
     return fetch(url);
   }
+}
+
+
+function downloadExternalData(url, outputPath) {
+  console.log(`Downloading: ${url} -> ${outputPath}`);
+  return fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to download ${url}: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      return new Promise((resolve, reject) => {
+        fs.writeFile(outputPath, JSON.stringify(data), (err) => {
+          if (err) return reject(err);
+          resolve();
+        });
+      });
+    })
+    .catch(err => {
+      console.error(`Error downloading ${url}:`, err);
+      throw err;
+    });
 }
 
 
