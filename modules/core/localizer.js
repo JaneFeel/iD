@@ -90,7 +90,7 @@ export function coreLocalizer() {
 
         const localeDirs = {
             general: 'locales',
-            tagging: presetsCdnUrl + 'dist/translations'
+            tagging: presetsCdnUrl + 'translations'
         };
 
         let fileMap = fileFetcher.fileMap();

@@ -75,7 +75,7 @@ function buildData() {
   // Create directories for external packages
   shell.mkdir('-p', [
     'dist/data/presets',
-    'dist/data/presets/dist/translations',
+    'dist/data/presets/translations',
     'dist/data/oci',
     'dist/data/wmf',
     'dist/data/nsi'
@@ -126,11 +126,11 @@ function buildData() {
     downloadExternalData(`${presetsUrl}dist/presets.min.json`, 'dist/data/presets/presets.min.json'),
     
     // Download and save presets translations locally
-    downloadExternalData(`${presetsUrl}dist/translations/index.min.json`, 'dist/data/presets/dist/translations/index.min.json'),
-    downloadExternalData(`${presetsUrl}dist/translations/en.min.json`, 'dist/data/presets/dist/translations/en.min.json'),
-    downloadExternalData(`${presetsUrl}dist/translations/zh.min.json`, 'dist/data/presets/dist/translations/zh.min.json'),
-    downloadExternalData(`${presetsUrl}dist/translations/zh-CN.min.json`, 'dist/data/presets/dist/translations/zh-CN.min.json'),
-    downloadExternalData(`${presetsUrl}dist/translations/zh-TW.min.json`, 'dist/data/presets/dist/translations/zh-TW.min.json'),
+    downloadExternalData(`${presetsUrl}dist/translations/index.min.json`, 'dist/data/presets/translations/index.min.json'),
+    downloadExternalData(`${presetsUrl}dist/translations/en.min.json`, 'dist/data/presets/translations/en.min.json'),
+    downloadExternalData(`${presetsUrl}dist/translations/zh.min.json`, 'dist/data/presets/translations/zh.min.json'),
+    downloadExternalData(`${presetsUrl}dist/translations/zh-CN.min.json`, 'dist/data/presets/translations/zh-CN.min.json'),
+    downloadExternalData(`${presetsUrl}dist/translations/zh-TW.min.json`, 'dist/data/presets/translations/zh-TW.min.json'),
     
     // Download and save OCI data locally
     downloadExternalData(`${ociUrl}dist/defaults.min.json`, 'dist/data/oci/defaults.min.json'),
