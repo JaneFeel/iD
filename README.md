@@ -56,6 +56,7 @@ Initial development of iD was made possible by a [grant of the Knight Foundation
 
 
 ```
+npm run dist:svg:iD
 npm run build:data
 npm version patch
 npm run build

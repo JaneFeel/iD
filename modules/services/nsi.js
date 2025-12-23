@@ -52,13 +52,13 @@ function setNsiSources() {
   const vMinor = `${v.major}.${v.minor}`;
   const cdn = nsiCdnUrl.replace('{version}', vMinor);
   const sources = {
-    'nsi_data': cdn + 'dist/nsi.min.json',
-    'nsi_dissolved': cdn + 'dist/dissolved.min.json',
-    'nsi_features': cdn + 'dist/featureCollection.min.json',
-    'nsi_generics': cdn + 'dist/genericWords.min.json',
-    'nsi_presets': cdn + 'dist/presets/nsi-id-presets.min.json',
-    'nsi_replacements': cdn + 'dist/replacements.min.json',
-    'nsi_trees': cdn + 'dist/trees.min.json'
+    'nsi_data': cdn + 'nsi.min.json',
+    'nsi_dissolved': cdn + 'dissolved.min.json',
+    'nsi_features': cdn + 'featureCollection.min.json',
+    'nsi_generics': cdn + 'genericWords.min.json',
+    'nsi_presets': cdn + 'presets/nsi-id-presets.min.json',
+    'nsi_replacements': cdn + 'replacements.min.json',
+    'nsi_trees': cdn + 'trees.min.json'
   };
 
   let fileMap = fileFetcher.fileMap();
