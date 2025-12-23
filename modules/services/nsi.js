@@ -480,6 +480,11 @@ function _upgradeTags(tags, loc) {
   let newTags = Object.assign({}, tags);  // shallow copy
   let changed = false;
 
+  // Check if NSI data is loaded
+  if (!_nsi.qids || !_nsi.matcher || !_nsi.ids) {
+    return null;
+  }
+
   // Before anything, perform trivial Wikipedia/Wikidata replacements
   Object.keys(newTags).forEach(osmkey => {
     const matchTag = osmkey.match(/^(\w+:)?wikidata$/);
@@ -677,6 +682,11 @@ function _upgradeTags(tags, loc) {
 function _isGenericName(tags) {
   const n = tags.name;
   if (!n) return false;
+
+  // Check if NSI data is loaded
+  if (!_nsi.matcher || !_nsi.kvt) {
+    return false;
+  }
 
   // tryNames just contains the `name` tag value and nothing else
   const tryNames = { primary: new Set([n]), alternate: new Set() };

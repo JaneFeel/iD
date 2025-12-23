@@ -78,7 +78,8 @@ function buildData() {
     'dist/data/presets/translations',
     'dist/data/oci',
     'dist/data/wmf',
-    'dist/data/nsi'
+    'dist/data/nsi/dist',
+    'dist/data/nsi/dist/presets'
   ]);
 
   // compile Font Awesome icons
@@ -141,7 +142,13 @@ function buildData() {
     downloadExternalData(`${wmfSitematrixUrl}data/wikipedia.min.json`, 'dist/data/wmf/wikipedia.min.json'),
     
     // Download and save NSI data locally
-    downloadExternalData(`${nsiUrl}dist/nsi.min.json`, 'dist/data/nsi/nsi.min.json'),
+    downloadExternalData(`${nsiUrl}dist/nsi.min.json`, 'dist/data/nsi/dist/nsi.min.json'),
+    downloadExternalData(`${nsiUrl}dist/dissolved.min.json`, 'dist/data/nsi/dist/dissolved.min.json'),
+    downloadExternalData(`${nsiUrl}dist/featureCollection.min.json`, 'dist/data/nsi/dist/featureCollection.min.json'),
+    downloadExternalData(`${nsiUrl}dist/genericWords.min.json`, 'dist/data/nsi/dist/genericWords.min.json'),
+    downloadExternalData(`${nsiUrl}dist/presets/nsi-id-presets.min.json`, 'dist/data/nsi/dist/presets/nsi-id-presets.min.json'),
+    downloadExternalData(`${nsiUrl}dist/replacements.min.json`, 'dist/data/nsi/dist/replacements.min.json'),
+    downloadExternalData(`${nsiUrl}dist/trees.min.json`, 'dist/data/nsi/dist/trees.min.json'),
     
     Promise.all([
       // Fetch the icons that are needed by the expected tagging schema version
