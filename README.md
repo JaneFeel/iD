@@ -55,8 +55,18 @@ iD also bundles portions of the following open source software.
 Initial development of iD was made possible by a [grant of the Knight Foundation](https://blog.mapbox.com/large-investment-in-openstreetmap-from-knight-foundation-cf7aa00534db).
 
 
+generate icons
 ```
 npm run dist:svg:iD
+npm run dist:svg:community
+npm run dist:svg:fa
+npm run dist:svg:maki
+npm run dist:svg:mapillary:signs
+npm run dist:svg:mapillary:objects
+npm run dist:svg:roentgen
+npm run dist:svg:temaki
+
+```
 npm run build:data
 npm version patch
 npm run build
