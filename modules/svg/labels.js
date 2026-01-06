@@ -698,7 +698,7 @@ export function svgLabels(projection, context) {
         var pad, bbox;
 
         // hide labels near the mouse
-        if (mouse && context.mode().id !== 'browse' && context.mode().id !== 'select') {
+        if (mouse && context.mode()?.id !== 'browse' && context.mode()?.id !== 'select') {
             pad = 20;
             bbox = { minX: mouse[0] - pad, minY: mouse[1] - pad, maxX: mouse[0] + pad, maxY: mouse[1] + pad };
             var nearMouse = _rdrawn.search(bbox).map(function(entity) { return entity.id; });
