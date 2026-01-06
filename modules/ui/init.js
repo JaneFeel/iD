@@ -290,10 +290,10 @@ export function uiInit(context) {
             .append('ul')
             .attr('class', 'map-footer-list');
 
-        aboutList
-            .append('li')
-            .attr('class', 'user-list')
-            .call(uiContributors(context));
+        // aboutList
+        //     .append('li')
+        //     .attr('class', 'user-list')
+        //     .call(uiContributors(context));
 
         var apiConnections = context.connection().apiConnections();
         if (apiConnections && apiConnections.length > 1) {
