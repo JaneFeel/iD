@@ -315,10 +315,10 @@ export function uiInit(context) {
             .attr('class', 'feature-warning')
             .call(uiFeatureInfo(context));
 
-        aboutList
-            .append('li')
-            .attr('class', 'version')
-            .call(uiVersion(context));
+        // aboutList
+        //     .append('li')
+        //     .attr('class', 'version')
+        //     .call(uiVersion(context));
 
         if (!context.embed()) {
             aboutList
