@@ -242,7 +242,7 @@ export function coreContext() {
     });
   };
 
-  let _editableZoom = 16;
+  let _editableZoom = 0;
   context.editableZoom = function(val) {
     if (!arguments.length) return _editableZoom;
     _editableZoom = val;
