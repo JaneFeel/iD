@@ -3,10 +3,20 @@ import { svgIcon } from '../../svg';
 import { uiTooltip } from '../tooltip';
 
 export function uiToolSidebarToggle(context) {
+    var _labelSelection;
+
+    function updateLabel() {
+        if (!_labelSelection) return;
+        var isCollapsed = context.container().select('.inspector-wrap').classed('collapsed');
+        _labelSelection.text(t(`icons.${isCollapsed ? 'expand' : 'collapse'}`));
+    }
 
     var tool = {
         id: 'sidebar_toggle',
-        label: t.append('toolbar.inspect')
+        label: function(selection) {
+            _labelSelection = selection;
+            updateLabel();
+        }
     };
 
     tool.render = function(selection) {
@@ -16,6 +26,8 @@ export function uiToolSidebarToggle(context) {
             .attr('aria-label', t('sidebar.tooltip'))
             .on('click', function() {
                 context.ui().sidebar.toggle();
+                window.setTimeout(updateLabel, 0);
+                window.setTimeout(updateLabel, 300);
             })
             .call(uiTooltip()
                 .placement('bottom')
