@@ -494,13 +494,9 @@ export function rendererBackground(context) {
         );
       }
 
-      const locator = imageryIndex.backgrounds.find(d => d.overlay && d.default);
-      if (locator) {
-        background.toggleOverlayLayer(locator);
-      }
-
       const overlays = (hash.overlays || '').split(',');
       overlays.forEach(overlay => {
+        if (overlay === 'mapbox_locator_overlay') return;   // hard-disable locator overlay from URL hash
         overlay = background.findSource(overlay);
         if (overlay) {
           background.toggleOverlayLayer(overlay);
