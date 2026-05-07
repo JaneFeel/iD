@@ -1,6 +1,6 @@
 {
   "name": "@janefeel3/id",
-  "version": "2.35.26",
+  "version": "2.35.27",
   "description": "A friendly editor for OpenStreetMap",
   "main": "dist/iD.min.js",
   "repository": "github:JaneFeel/iD",
