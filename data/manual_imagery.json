@@ -28,7 +28,7 @@
         "type": "tms",
         "category": "osmbasedmap",
         "overlay": true,
-        "default": true,
+        "default": false,
         "attribution": {
             "url": "https://www.mapbox.com/about/maps",
             "text": "Terms & Feedback",
