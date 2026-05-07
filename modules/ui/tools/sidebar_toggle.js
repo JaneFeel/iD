@@ -7,7 +7,7 @@ export function uiToolSidebarToggle(context) {
 
     function updateLabel() {
         if (!_labelSelection) return;
-        var isCollapsed = context.container().select('.inspector-wrap').classed('collapsed');
+        var isCollapsed = context.container().select('.sidebar').classed('collapsed');
         _labelSelection.text(t(`icons.${isCollapsed ? 'expand' : 'collapse'}`));
     }
 
